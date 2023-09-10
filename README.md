@@ -59,7 +59,7 @@ local CustomA90Module
 local DoorRange
 local SpoofMotor
 local ESP_Items = {GoldPile={"Gold",1.5},Key={"Key",1.5},KeyObtain={"Key",1.5},LiveHintBook={"Book",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},LiveBreakerPolePickup={"Breaker",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},PickupItem={"Paper",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"NVCS-3000",1.5}}
-local ESP_Entities = {Jack={"Jack",3},A90={"A90",3},Spider={"Timothy",3},Double_Bed={"Hide",4},Bed={"Hide",4},Wardrobe={"Hide",4},RushMoving={"Rush",5},AmbushMoving={"Ambush",5},FigureRagdoll={"Figure",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Eyes={"Eyes",4},Snare={"Snare",2},A60={"A-60",10},A120={"A-120",10}}
+local ESP_Entities = {DoorFake={"Dupe",5},Jack={"Jack",3},A90={"A90",3},Spider={"Timothy",3},Double_Bed={"Hide",4},Bed={"Hide",4},Wardrobe={"Hide",4},RushMoving={"Rush",5},AmbushMoving={"Ambush",5},FigureRagdoll={"Figure",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Eyes={"Eyes",4},Snare={"Snare",2},A60={"A-60",10},A120={"A-120",10}}
 local ESP_Other = {ChestBoxLocked={"Chest",5.5},ChestBox={"Chest",5.5},Rooms_Locker={"Locker",5.5},Door={"Door",5},LeverForGate={"Lever",3},Bandage={"Bandage",0.5}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
@@ -193,7 +193,7 @@ local function ApplySettings(Object)
                 if IsValid then
                     if Bool then
                         local TXT = IsValid[1]
-                        if IsValid[1] == "Cửa" then
+                        if IsValid[1] == "Door" then
                             local RoomName
                             if Floor.Value == "Rooms" then
                                 RoomName = ""
@@ -216,7 +216,7 @@ local function ApplySettings(Object)
                                 end
                                 RoomName = " (" .. NewString .. ")"
                             end
-                            TXT = "Cửa " .. (Floor.Value == "Rooms" and "A-" or "") .. tonumber(Object.Parent.Name) + 1 .. RoomName
+                            TXT = "Door " .. (Floor.Value == "Rooms" and "A-" or "") .. tonumber(Object.Parent.Name) + 1 .. RoomName
                         end
                         if IsValid[1] == "Gold" then
                             TXT = Object:GetAttribute("GoldValue") .. " Gold"
@@ -239,7 +239,7 @@ local function ApplySettings(Object)
                     end
                     local Target = Object
                     if IsValid[1] == "Door" and Object.Parent.Name ~= "49" and Object.Parent.Name ~= "50" then
-                        Target = Object:WaitForChild("Cửa")
+                        Target = Object:WaitForChild("Door")
                     end
                     if Bool then
                         local Highlight = Instance.new("Highlight",Target)
@@ -609,6 +609,29 @@ if Floor.Value == "Hotel" or Floor.Value == "Fools" then
         end
     end)
 end
+Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items like Vitamins, The Lighter, and The Flashlight.",false,function(Bool)
+    WasteItems = Bool
+    while task.wait(1) do
+        if not WasteItems then
+            break
+        end
+        for _,Player in pairs(Players:GetPlayers()) do
+            local function WasteItem(Item)
+                if Item.Parent ~= Character and Item.Parent.Parent ~= LocalPlayer then
+                    if ((Item.Name == "Lighter" or Item.Name == "Flashlight") and Item:GetAttribute("Enabled") == false) or Item.Name == "Vitamins" then
+                        Item.Remote:FireServer()
+                    end
+                end
+            end
+            for _,Item in pairs(Player.Backpack:GetChildren()) do
+                WasteItem(Item)
+            end
+            for _,Item in pairs(Player.Character:GetChildren()) do
+                WasteItem(Item)
+            end
+        end
+    end
+end)
     Tab2:Toggle("Disable A-90","Disables A-90 visual, sound, and damage.",false,function(Bool)
         DisableA90 = Bool
     end)
@@ -657,6 +680,15 @@ if Floor.Value == "Hotel" or Floor.Value == "Fools" then
         DisableTimothy = Bool
     end)
 end
+Tab2:Toggle("Spam Motor Replication","Other players will basically see you having a seizure.",false,function(Bool)
+    if Bool then
+        SpoofMotor = game:GetService("RunService").Heartbeat:Connect(function()
+            MotorReplication:FireServer(math.random(1,100000),math.random(1,100000),math.random(1,100000),false)
+        end)
+    else
+        SpoofMotor:Disconnect()
+    end
+end)
 if Floor.Value == "Hotel" or Floor.Value == "Fools" then
     Tab2:Toggle("Unbreakable Lights","Makes it so entities like Rush and Ambush won't shatter/break the lights (which makes the room dark)",false,function(Bool)
         if Bool then
