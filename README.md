@@ -1,7 +1,7 @@
 if game.CoreGui:FindFirstChild("FluxLib") or game.CoreGui:FindFirstChild("Message") then return end
 
 local Flux = loadstring(game:HttpGet("https://lolcat.boo/assets/flux-fixed"))()
-local Window = Flux:Window("YOU HUB  ", "Create By Rechedmcvn", Color3.new(0,0.8), Enum.KeyCode.RightControl)
+local Window = Flux:Window("YOU HUB  ", "Create By Rechedmcvn", Color3.new(7,9.9), Enum.KeyCode.RightControl)
 local Tab = Window:Tab("Main", "rbxassetid://6026568198")
 local Tab2 = Window:Tab("Visual", "rbxassetid://6031763426")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -59,7 +59,7 @@ local CustomA90Module
 local DoorRange
 local SpoofMotor
 local ESP_Items = {KeyObtain={"Key",1.5},LiveHintBook={"Book",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},LiveBreakerPolePickup={"Fuse",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},PickupItem={"Paper",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
-local ESP_Entities = {JeffTheKiller={"Jeff",7},Greed={"Greed",5"},DoorFake={"Dupe",5},Jack={"Jack",3},A90={"A90",3},Spider={"Timothy",3},Double_Bed={"Hide",4},Bed={"Hide",4},Wardrobe={"Hide",4},RushMoving={"Rush",5},AmbushMoving={"Ambush",5},FigureRagdoll={"Figure",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Eyes={"Eyes",4},Snare={"Snare",2},A60={"A-60",10},A120={"A-120",10}}
+local ESP_Entities = {JeffTheKiller={"Jeff",7},DoorFake={"Dupe",5},Spider={"Timothy",3},Double_Bed={"Hide",4},Bed={"Hide",4},Wardrobe={"Hide",4},RushMoving={"Rush",5},AmbushMoving={"Ambush",5},FigureRagdoll={"Figure",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Eyes={"Eyes",4},Snare={"Snare",2},A60={"A-60",10},A120={"A-120",10}}
 local ESP_Other = {Door={"Door,5},LeverForGate={"Lever",3},GoldPile={"Gold",1},Bandage={"Bandage",1}}
 local MainFrame = MainUI.MainFrame
 local GameData = ReplicatedStorage.GameData
@@ -216,7 +216,7 @@ local function ApplySettings(Object)
                                 end
                                 RoomName = " (" .. NewString .. ")"
                             end
-                            TXT = "Door " .. (Floor.Value == "Rooms" and "A-" or "") .. tonumber(Object.Parent.Name) + 1 .. RoomName
+                            TXT = "Cửa " .. (Floor.Value == "Rooms" and "A-" or "") .. tonumber(Object.Parent.Name) + 1 .. RoomName
                         end
                         if IsValid[1] == "Gold" then
                             TXT = Object:GetAttribute("GoldValue") .. " Gold"
@@ -238,8 +238,8 @@ local function ApplySettings(Object)
                         Object.BillboardGui:Destroy()
                     end
                     local Target = Object
-                    if IsValid[1] == "Door" and Object.Parent.Name ~= "49" and Object.Parent.Name ~= "50" then
-                        Target = Object:WaitForChild("Door")
+                    if IsValid[1] == "Cửa" and Object.Parent.Name ~= "49" and Object.Parent.Name ~= "50" then
+                        Target = Object:WaitForChild("Cửa")
                     end
                     if Bool then
                         local Highlight = Instance.new("Highlight",Target)
